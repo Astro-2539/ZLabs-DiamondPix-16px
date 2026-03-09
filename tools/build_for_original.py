@@ -1,3 +1,7 @@
+'''
+    此脚本用于编译上游字体（UwU点矩黑）。仅用于测试目的
+'''
+
 import math
 import shutil
 import argparse
@@ -8,7 +12,9 @@ from fontTools.ttLib import TTFont
 from kbitfont import KbitFont
 from pixel_font_builder import FontBuilder, WeightName, SerifStyle, SlantStyle, WidthStyle, Glyph, opentype
 
-import path_define, options
+from pathlib import Path
+
+import options
 from kbitx_marge_selected import advanced_merge_kbitx_files
 from kbitx_marge_fallback import merge_kbitx_files
 
@@ -17,43 +23,36 @@ def fix_mono_mode(font: TTFont):
     font['OS/2'].panose.bFamilyType = 2 
     font['OS/2'].panose.bProportion = 9 # 修改字体的 Panose 属性，使其能够被识别为等宽字体
     font['OS/2'].xAvgCharWidth = 512    # 修复 Panose 属性引起的字宽问题
-    font['OS/2'].achVendID = "ZLAB"
+    # font['OS/2'].achVendID = "ZLAB"
     font['OS/2'].ulCodePageRange1 = 0b1100000000101000000000000000001
     font['OS/2'].ulCodePageRange2 = 0b1000000000000000000000000000000    # 为字体添加微软编码页属性，防止某些程序不识别
 
 def font_name_table_set(font: TTFont, region: str, style: str):
     info_CHS = {
-        0: '© 2026 Astro_2539. © 2025-2026 ChenhaoUwU, Dalict, yzdnn.',
-        1: 'Z工坊金刚黑体 16px',
+        0: '© 2025-2026 ChenhaoUwU, Dalict, yzdnn.',
+        1: 'UwU 点矩黑',
         2: 'Regular',
-        8: 'Z Labs Design',
-        13: '本字体软件采用OFL-1.1开源字体许可证授权。欲知详情，请访问：https://openfontlicense.org/。\n本字体所有副本均免费分发，若您通过付费途径获取本字体软件，请立即举报并差评！',
+        13: '本字体软件采用OFL-1.1开源字体许可证授权。欲知详情，请访问：https://openfontlicense.org/。',
         19: '像素之光点亮文字之美 The luster of pixels lights up the beauty of words.'
     }
     info_CHT = {
-        0: '© 2026 Astro_2539. © 2025-2026 ChenhaoUwU, Dalict, yzdnn.',
-        1: 'Z工坊金剛黑體 16px',
+        0: '© 2025-2026 ChenhaoUwU, Dalict, yzdnn.',
+        1: 'UwU 點矩黑',
         2: 'Regular',
-        8: 'Z Labs Design',
-        13: '本字型檔採用OFL-1.1開源字型許可證授權。欲知詳情，請訪問：https://openfontlicense.org/。\n本字型檔所有副本均免費分發，若您通過付費途徑獲取本字型檔，請立即舉報並差評！',
+        13: '本字型檔採用OFL-1.1開源字型許可證授權。欲知詳情，請訪問：https://openfontlicense.org/。',
         19: '像素之光點亮文字之美 The luster of pixels lights up the beauty of words.'
     }
     match style:
         case 'Standard':
-            info_CHS[1] += ' M '
-            info_CHT[1] += ' M '
+            pass
         case 'Circle Dot':
-            info_CHS[1] += ' MD '
-            info_CHT[1] += ' MD '
+            info_CHS[1] += ' D'
+            info_CHT[1] += ' D'
         case 'Square Dot':
-            info_CHS[1] += ' MS '
-            info_CHT[1] += ' MS '
+            info_CHS[1] += ' S'
+            info_CHT[1] += ' S'
         case _:
             pass
-    if '_fallback' in region:
-        region.replace('_fallback', ' FB')
-    info_CHS[1] += region
-    info_CHT[1] += region
     info_CHS[4] = info_CHS[1] + ' Regular'
     info_CHT[4] = info_CHT[1] + ' Regular'
 
@@ -77,7 +76,13 @@ def font_name_table_set(font: TTFont, region: str, style: str):
         new_record.string = new_content.encode('utf-16-be')
         name_table.names.append(new_record)
 
+# 定义地址
+project_root_dir = Path(__file__).parent.joinpath('..').resolve()
+src_dir = project_root_dir.joinpath('src')
 
+build_dir = project_root_dir.joinpath('build_original')
+outputs_dir = build_dir.joinpath('outputs')
+releases_dir = build_dir.joinpath('releases')
 
 
 def main():
@@ -90,28 +95,20 @@ def main():
     date_now = date.today()
     date_now_f = date_now.strftime("%Y%m%d")
 
+
+
     # 初始化导出文件夹
-    if path_define.build_dir.exists():
-        shutil.rmtree(path_define.build_dir)
-    path_define.outputs_dir.mkdir(parents=True)
-    path_define.releases_dir.mkdir(parents=True)
-
-    # # 将src文件夹中的CN字形文件复制到data文件夹中
-    # shutil.copy(path_define.src_dir.joinpath('ZLabsDiamondPix_16px_SC_patch.kbitx'), path_define.data_dir)
-
-    # 合并字形，生成对应标准字形的完整版本
-    for region in ['SC']:
-        merge_kbitx_files(path_define.src_dir.joinpath(f'16.kbitx'),
-                          path_define.src_dir.joinpath(f'ZLabsDiamondPix_16px_SC_patch.kbitx'),
-                          path_define.data_dir.joinpath(f'ZLabsDiamondPix_16px_SC.kbitx'))
-
+    if build_dir.exists():
+        shutil.rmtree(build_dir)
+    outputs_dir.mkdir(parents=True)
+    releases_dir.mkdir(parents=True)
 
     # 生成字体
-    for language_flavor in options.language_flavors:
-        kbit_font = KbitFont.load_kbitx(path_define.data_dir.joinpath(f'ZLabsDiamondPix_16px_{language_flavor}.kbitx'))
+    for language_flavor in ['TC']:
+        kbit_font = KbitFont.load_kbitx(src_dir.joinpath(f'16.kbitx'))
 
-        # 指定像素点样式，默认仅SC启用多样式
-        if language_flavor == 'SC' and args.DisableStyles == False:
+        # 指定像素点样式，默认仅TC启用多样式
+        if language_flavor == 'TC' and args.DisableStyles == False:
             outlineStyles = ['Standard', 'Square Dot', 'Circle Dot']
         else:
             outlineStyles = ['Standard']
@@ -121,10 +118,10 @@ def main():
 
             # 根据像素点风格设置字体名称
             if style == 'Square Dot':
-                famliy_name = kbit_font.names.family.replace("M", "MS")
+                famliy_name = kbit_font.names.family + ' S'
                 outputCode = "MS"
             elif style == 'Circle Dot':
-                famliy_name = kbit_font.names.family.replace("M", "MD")
+                famliy_name = kbit_font.names.family + ' D'
                 outputCode = "MD"
             else:
                 famliy_name = kbit_font.names.family
@@ -141,12 +138,12 @@ def main():
             builder.font_metric.x_height = kbit_font.props.x_height
             builder.font_metric.cap_height = kbit_font.props.cap_height
 
-            builder.meta_info.version = f"Build_{date_now_f}"
+            builder.meta_info.version = kbit_font.names.version
             builder.meta_info.weight_name = WeightName.REGULAR
             builder.meta_info.serif_style = SerifStyle.SERIF
             builder.meta_info.slant_style = SlantStyle.NORMAL
             builder.meta_info.width_style = WidthStyle.MONOSPACED
-            builder.meta_info.manufacturer = 'Z Labs Design'
+            builder.meta_info.manufacturer = kbit_font.names.manufacturer
             builder.meta_info.designer = kbit_font.names.designer
             builder.meta_info.description = kbit_font.names.description
             builder.meta_info.copyright_info = kbit_font.names.copyright
@@ -164,7 +161,6 @@ def main():
             
             # 设置像素点转换分辨率
             builder.opentype_config.px_to_units = 64
-
 
             k_glyph_notdef = kbit_font.named_glyphs['.notdef']
             builder.glyphs.append(Glyph(
@@ -209,14 +205,14 @@ def main():
             fix_mono_mode(ttf_font)
             font_name_table_set(ttf_font, language_flavor, style)
 
-            print(f'Creating ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf, please wait…')
-            ttf_font.save(path_define.outputs_dir.joinpath(f'ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf'))
-            print(f'Successfully created ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf')
+            print(f'Creating UwUMatrix_16U_{outputCode}.ttf, please wait…')
+            ttf_font.save(outputs_dir.joinpath(f'UwUMatrix_16U_{outputCode}.ttf'))
+            print(f'Successfully created UwUMatrix_16U_{outputCode}.ttf')
 
             ttf_font.flavor = 'woff2'
-            print(f'Creating ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf.woff2, please wait…')
-            ttf_font.save(path_define.outputs_dir.joinpath(f'ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf.woff2'))
-            print(f'Successfully created ZLabsDiamondPix_16px_{outputCode}_{language_flavor.upper()}.ttf.woff2')
+            print(f'Creating UwUMatrix_16U_{outputCode}.ttf.woff2, please wait…')
+            ttf_font.save(outputs_dir.joinpath(f'UwUMatrix_16U_{outputCode}.ttf.woff2'))
+            print(f'Successfully created UwUMatrix_16U_{outputCode}.ttf.woff2')
 
     # for font_format in options.font_formats:
     #     with zipfile.ZipFile(path_define.releases_dir.joinpath(f'ZLabsGeoPix_16px_{font_format}.zip'), 'w') as file:

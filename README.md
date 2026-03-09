@@ -1,19 +1,19 @@
-# Z Labs GeoPix 16px
+# Z工坊金刚黑体 16px / Z Labs DiamondPix 16px
 
-![Title](/img/幻灯片1.PNG "Title")
+![Title](/img/title_short.png "Title")
 
-**「Z Labs GeoPix 16px」（Z工坊几何黑体 16px）** 是一款基于 [「UwU点矩黑」](https://github.com/ChenhaoUwU/UwUMatrix) 制作的一款中文像素字体，规格为 16px（汉字实际占用大小为 15*15），采用特大中宫黑体字形风格，西文字符按等宽规格绘制。
+**「Z工坊金刚黑体 16px」（Z Labs DiamondPix 16px）** 是一款基于 [「UwU 点矩黑」](https://github.com/ChenhaoUwU/UwUMatrix) 制作的一款中文像素字体，规格为 16px（汉字实际占用大小为 15*15），采用特大中宫黑体字形风格，西文字符按等宽规格绘制。
 
-原字体的汉字取形更接近传承字形。本字体对其字形进行了调整，使其更接近大陆标准，更适合在简体环境下使用。
+原字体的汉字取形更接近传承字形。本字体对其字形进行了调整，使其更接近大陆标准，更适合在简体中文环境下使用。
 
 
 
 
 > [!WARNING]
 > 
-> 此字体仍处于早期开发阶段，缺失大量汉字。
+> 此字体仍处于早期开发阶段，缺失大量汉字，尚未达到可用水平。
 > 
-> 本字体的更新将与上游字体同步。由于上游字体仍在积极开发中，因此本字体暂时不会增补新的字形。
+> 本字体的更新将与上游字体同步。由于上游字体仍在积极开发中，因此本字体**暂时不会先于原字体增补新的字形**。
 
 > [!IMPORTANT]
 > 
@@ -26,7 +26,13 @@
 
 ## 字体介绍
 
+![介绍页1](/img/placeholder.png "介绍页1")
 
+![介绍页2](/img/placeholder.png "介绍页2")
+
+![排版示例](/img/4.png "排版示例")
+
+![授权页](/img/placeholder.png "授权页")
 
 ## 字体覆盖范围
 
@@ -36,37 +42,37 @@
 
 *注：部分部件仍遵循原字体写法（如断笔），因此并不完全遵循陆标，故使用SC后缀。*
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 GB/T 2312 （5996 / 6763）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧 GB/T 2312 （809 / 6763）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 《通用规范汉字表》（5900 / 8105）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧 《通用规范汉字表》（797 / 8105）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 Big5 常用汉字表（3233 / 5401）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧 Big5 常用汉字表（804 / 5401）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧《常用国字标准字体表》（3018 / 4808）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧《常用国字标准字体表》（761 / 4808）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 jf7000 当务字集基本包（3643 / 6373）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧 jf7000 当务字集基本包（796 / 6373）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 GB/T 12345（4255 / 6866）
+&nbsp;&nbsp;&nbsp;&nbsp;🚧 GB/T 12345（795 / 6866）
 
-&nbsp;&nbsp;&nbsp;&nbsp;🚧 JIS X 0208（3234 / 6355）
-
-&nbsp;&nbsp;&nbsp;&nbsp;ℹ️ 共计支持汉字：6216
+&nbsp;&nbsp;&nbsp;&nbsp;ℹ️ 共计支持汉字：1064
 
 
 
 ## 从工程文件构建字体
 
-本字体使用 [Bits'n'Picas](https://github.com/kreativekorp/bitsnpicas) 制作。运行 `./tools/build.py` 即可生成字体。
+字形使用 [Bits'n'Picas](https://github.com/kreativekorp/bitsnpicas) 绘制。
+
+构建脚本使用 Python 编写，运行 `./tools/build.py` 即可生成字体。
 
 构建流程依赖 `fonttools` 库、`pixel_font_builder` 库和 `kbitfont` 库。
 
 ## 字体授权
 
-本项目授权分为「字体」及「构建代码」两部分。
+本项目授权分为「字型」及「构建代码」两部分。
 
 ### 字体
 
-本字体修改自 [「UwU点矩黑」](https://github.com/ChenhaoUwU/UwUMatrix) 。
+本字体是基于 [「UwU 点矩黑」](https://github.com/ChenhaoUwU/UwUMatrix)的二次创作项目。
 
 本字体使用与上游字体相同的 [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/) 许可证授权。
 
@@ -78,7 +84,7 @@
 
 本字体作者保留字体名称「Z工坊 / Z Labs」。
 
-上游字体「UwU点矩黑」作者保留字体名称「UwU Matrix」和「UwUMatrix」。
+上游字体「UwU 点矩黑」作者保留字体名称「UwU Matrix」和「UwUMatrix」。
 
 ### 构建代码
 
